@@ -28,7 +28,18 @@ def reformat_graph_layout(G, layout):
     return positions
 
 
-def visualize_graph(G, edge_curvatures=None, node_labels=None, node_size=None, layout="graphviz", pos=None, filename="networkx.html", title=""):
+def mpl_to_plotly(cmap, pl_entries=10):
+    h = 1.0 / (pl_entries - 1)
+    pl_colorscale = []
+    for k in range(pl_entries):
+        # Get the RGBA color from the matplotlib colormap
+        r, g, b, _ = cmap(k * h)
+        # Convert to an RGB string
+        pl_colorscale.append([k * h, f'rgb({int(r*255)},{int(g*255)},{int(b*255)})'])
+    return pl_colorscale
+
+
+def visualize_graph(G, edge_curvatures=None, node_labels=None, node_size=None, cmap=None, layout="graphviz", pos=None, filename="networkx.html", title=""):
     if pos:
         positions = pos
     else:
@@ -41,10 +52,11 @@ def visualize_graph(G, edge_curvatures=None, node_labels=None, node_size=None, l
     if use_edge_curvatures:
         # Normalize the curvature values for color mapping
         curvatures = list(edge_curvatures.values())
-        min_c = min(curvatures)
-        max_c = max(curvatures)
+        min_c = -1#min(curvatures)
+        max_c = 1#max(curvatures)
         norm = mcolors.Normalize(vmin=min_c, vmax=max_c)
-        cmap = cm.get_cmap('coolwarm')
+        mpl_cmap = cm.get_cmap(cmap)
+        plotly_colorscale = mpl_to_plotly(mpl_cmap)
     else:
         # Set a default edge color
         default_edge_color = 'gray'
@@ -58,7 +70,7 @@ def visualize_graph(G, edge_curvatures=None, node_labels=None, node_size=None, l
         if use_edge_curvatures and edge in edge_curvatures:
             curvature = edge_curvatures[edge]
             # Map curvature to color
-            color = mcolors.rgb2hex(cmap(norm(curvature)))
+            color = mcolors.rgb2hex(mpl_cmap(norm(curvature)))
             hover_text = f'Curvature: {curvature:.2f}'
         else:
             color = default_edge_color  # Default edge color
@@ -117,7 +129,7 @@ def visualize_graph(G, edge_curvatures=None, node_labels=None, node_size=None, l
             y=[None],
             mode='markers',
             marker=dict(
-                colorscale='Jet',
+                colorscale=plotly_colorscale,
                 showscale=True,
                 cmin=min_c,
                 cmax=max_c,
