@@ -1,7 +1,8 @@
-## Graph Curvature Analysis and Visualization
+# Graph Curvature Analysis and Visualization
 
 
 ## Description
+This repository calculated the **Formann-Ricci Curvature** based on a modified and corrected version of this [repository](https://github.com/jctops/understanding-oversquashing)
 
 
 ## Plots
@@ -59,7 +60,7 @@ visualize_graph(G, edge_curvatures,
 
 
 ## Installation
-
+For the code to work (mostly the visualization layouts), you need to install the following dependencies:
 ```
  sudo apt-get install graphviz libgraphviz-dev pkg-config
 ```
