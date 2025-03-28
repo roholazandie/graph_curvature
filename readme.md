@@ -2,7 +2,7 @@
 
 
 ## Description
-This repository calculated the **Formann-Ricci Curvature** based on a modified and corrected version of this [repository](https://github.com/jctops/understanding-oversquashing)
+This repository calculated the **Forman-Ricci Curvature** based on a modified and corrected version of this [repository](https://github.com/jctops/understanding-oversquashing)
 
 
 ## Plots
